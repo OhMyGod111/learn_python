@@ -3,9 +3,11 @@
 import re
 from src.utils import line
 """
-    \d可以匹配一个数字
-    \w可以匹配一个字母或数字
-    \s可以匹配一个空格（也包括Tab等空白符），所以\s+表示至少有一个空格，例如匹配' '，' '等；
+    \d 匹配一个数字
+    \D 匹配任意非数字
+    \w 匹配一个字母或数字
+    \s 匹配一个空格（也包括Tab等空白符），所以\s+表示至少有一个空格，例如匹配' '，' '等；
+    .  匹配任意字符  例如：'py.'可以匹配'pyc'、'pyo'、'py!'等等。
     
     用*表示任意个字符（包括0个）
     用+表示至少一个字符
@@ -25,11 +27,11 @@ from src.utils import line
     
 """
 def main():
-    str = '\\hangzhou'   # 由于Python的字符串本身也用\转义
-    print(str)
+    str1 = '\\hangzhou'   # 由于Python的字符串本身也用\转义
+    print(str1)
 
     '''
-    判断正则表达式是否匹配
+    判断正则表达式是否匹配 match
     '''
     obj = re.match(r'^\d{3}\-\d{3,8}$', '010-12456')
     if obj is None:
@@ -38,7 +40,7 @@ def main():
         print('yes，找到了与之匹配的结果')
 
     '''
-    切分字符串
+    切分字符串 split
     '''
     # 普通字符串切分
     print('a b c cc dd ss'.split(' '))
@@ -55,7 +57,7 @@ def main():
     line.line()
 
     '''
-    分组
+    分组 groups
     正则表达式还有提取子串的强大功能。用()表示的就是要提取的分组（Group）
     '''
     m = re.match(r'^(\d{3})-(\d{3,8})','012-10086')
@@ -80,7 +82,7 @@ def main():
     print(re.match(r'^(\d+?)(0*)$', '108600').groups()) # \d+?采用非贪婪匹配
 
     '''
-    编译
+    编译  compile
     
     当我们在Python中使用正则表达式时，re模块内部会干两件事情：
 
@@ -95,6 +97,51 @@ def main():
 
     print(re_telephone.match('010-12345').groups())
     print(re_telephone.match('010-8086').groups())
+
+    line.line('search方法')
+    '''
+    search方法
+    '''
+    print(re.search('www', 'www.runoob.com').span())  # 在起始位置匹配
+    print(re.search('com', 'www.runoob.com').span())  # 不在起始位置匹配
+
+    line.line('检索和替换')
+    '''
+    检索和替换 sub 用于替换字符串中的匹配项。
+    '''
+    phone = "2004-959-559 # 这是一个电话号码"
+    print(re.sub(r'#.*$', '', phone))
+    print(re.sub(r'\D', '', phone))
+
+    # 将匹配的数字乘于 2
+    def double(matched):
+        value = int(matched.group('value'))
+        return str(value * 2)
+
+    s = 'A23G4HFD567'
+    print(re.sub('(?P<value>\d+)', double, s))
+
+    line.line('findall')
+
+    """
+    findall 匹配的所有子串，并返回一个列表，如果没有找到匹配的，则返回空列表
+    """
+    pattern = re.compile(r'\d+')   # 查找数字
+    result1 = pattern.findall('runoob 123 google 456')
+    result2 = pattern.findall('run88oob123google456', 0, 10)
+
+    print(result1)
+    print(result2)
+
+    line.line('finditer')
+
+    """
+    finditer  和 findall 类似，在字符串中找到正则表达式所匹配的所有子串，并把它们作为一个迭代器返回。
+    """
+    it = re.finditer(r"\d+","12a32bc43jf3")
+    for match in it:
+        print (match.group() )
+
     pass
 
 
