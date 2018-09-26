@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import re
+
 from src.utils import line
+
 """
     \d 匹配一个数字
     \D 匹配任意非数字
@@ -54,15 +56,25 @@ def main():
     print(re.split(r'\s+', 'a b cc dd ee      rr')) # 可以识别多余的空格
     print(re.split(r'[\s\,]+','a,b,c,d,e f  g,,,fd d')) # 无论多少个空格 ,号 ;号都可以识别
 
-    line.line()
+    line.line('groups')
 
     '''
     分组 groups
     正则表达式还有提取子串的强大功能。用()表示的就是要提取的分组（Group）
     '''
-    m = re.match(r'^(\d{3})-(\d{3,8})','012-10086')
-    print(m)
+    m = re.match(r'^(\d{3})-(\d{3,8})', '012-10086')
+    print(m.span())
+    print(m.start())
+    print(m.end())
     print(m.group(0,1,2))  # 返回元组
+    print(m.groups())
+
+    line.line('search ----->')
+    m = re.search(r'(abc)', 'pppabc123456abc')
+    print(m.span())
+    print(m.start())
+    print(m.end())
+    print(m.group(0,1))  # 返回元组
     print(m.groups())
 
     t = '19:05:30'
@@ -74,12 +86,14 @@ def main():
     else:
         print('时间不合法！')
 
-    line.line()
+    line.line('贪婪匹配')
     '''
     贪婪匹配
     '''
     print(re.match(r'^(\d+)(0*)$', '108600').groups())  # \d+采用贪婪匹配
     print(re.match(r'^(\d+?)(0*)$', '108600').groups()) # \d+?采用非贪婪匹配
+
+    line.line('compile')
 
     '''
     编译  compile
@@ -102,16 +116,28 @@ def main():
     '''
     search方法
     '''
-    print(re.search('www', 'www.runoob.com').span())  # 在起始位置匹配
-    print(re.search('com', 'www.runoob.com').span())  # 不在起始位置匹配
+    print(re.search('www', 'www.baidu.com').span())  # 在起始位置匹配
+    print(re.search('com', 'www.baidu.com').span())  # 不在起始位置匹配
+
+    line.line("match和search的区别")
+
+    ret_match = re.match("c", "abcde");  # 从字符串开头匹配，匹配到返回match的对象，匹配不到返回None
+    if (ret_match):
+        print("ret_match:" + ret_match.group());
+    else:
+        print("ret_match:None");
+
+    ret_search = re.search("c", "abcde");  # 扫描整个字符串返回第一个匹配到的元素并结束，匹配不到返回None
+    if (ret_search):
+        print("ret_search:" + ret_search.group());
 
     line.line('检索和替换')
     '''
     检索和替换 sub 用于替换字符串中的匹配项。
     '''
     phone = "2004-959-559 # 这是一个电话号码"
-    print(re.sub(r'#.*$', '', phone))
-    print(re.sub(r'\D', '', phone))
+    print(re.sub(r'#.*$', '', phone))  # 删除了注释之后的内容
+    print(re.sub(r'\D', '', phone))    # 删除非数字的内容
 
     # 将匹配的数字乘于 2
     def double(matched):
@@ -121,14 +147,20 @@ def main():
     s = 'A23G4HFD567'
     print(re.sub('(?P<value>\d+)', double, s))
 
+    line.line("subn")
+
+    print(re.subn('[1-2]', 'A', '123456abcdef'))
+    print(re.sub("g.t", "have", 'I get A,  I got B ,I gut C'))
+    print(re.subn("g.t", "have", 'I get A,  I got B ,I gut C'))
+
     line.line('findall')
 
     """
     findall 匹配的所有子串，并返回一个列表，如果没有找到匹配的，则返回空列表
     """
     pattern = re.compile(r'\d+')   # 查找数字
-    result1 = pattern.findall('runoob 123 google 456')
-    result2 = pattern.findall('run88oob123google456', 0, 10)
+    result1 = pattern.findall('shanghai 123 beijing 456')
+    result2 = pattern.findall('aaa333bbb555ccc666', 0, 18)
 
     print(result1)
     print(result2)
@@ -142,8 +174,19 @@ def main():
     for match in it:
         print(match.group())
 
-    pass
+    # <editor-fold desc="示例  match 和 search">
+    line.line()
+    print(re.match('([\w]*)([\d]*)', 'abc123qwe'))
+    print(re.match('([\w]*)([\d]*)', 'abc123qwe').group(0,1,2))
 
+
+
+    a = "123abc456"
+    print(re.search("([0-9]*)([a-z]*)([0-9]*)", a).group(0,1,2,3))  # 123abc456,返回整体
+    print(re.search("([0-9]*)([a-z]*)([0-9]*)", a).groups(0))  # 123abc456,返回整体
+    # </editor-fold>
+
+    pass
 
 
 if __name__ == '__main__':
