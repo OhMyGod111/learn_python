@@ -12,15 +12,15 @@ j = 3
 
 c = 1 + 2 * j 
 
-str = "hello Python"
+str1 = "hello Python"
 
 # print("a=" + a +";b="+b+";c="+c)
 print(a)
 print(c)
-print(str)
+print(str1)
 
 # 数据类型判断
-print(type(a),type(b),type(c),type(str))
+print(type(a), type(b), type(c), type(str1))
 print(isinstance(a,int),isinstance(b,float),isinstance(j,complex))
 
 # 导入 sys 模块
@@ -37,3 +37,5 @@ from sys import argv,path  #  导入特定的成员
  
 print('================python from import===================================')
 print('path:',path) # 因为已经导入path成员，所以此处引用时不需要加sys.path
+
+print(int('10016'))
